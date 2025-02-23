@@ -18,17 +18,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import SidebarCompo from '../Dashboard/components/SidebarCompo.vue';
-import HeaderCompo from '../Dashboard/components/HeaderCompo.vue';
+import { ref } from 'vue'
+import SidebarCompo from '../Dashboard/components/SidebarCompo.vue'
+import HeaderCompo from '../Dashboard/components/HeaderCompo.vue'
 
 // Ref untuk sidebar
-const sidebar = ref(null);
+const sidebar = ref(null)
 
 // Fungsi untuk toggle sidebar
 const toggleSidebar = () => {
-  sidebar.value.toggleSidebar();
-};
+  sidebar.value.toggleSidebar()
+}
 </script>
 
 <style scoped>

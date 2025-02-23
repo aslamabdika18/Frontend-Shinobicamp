@@ -40,31 +40,55 @@
         <!-- Home Link dengan Efek Garis Bawah -->
         <router-link
           to="/"
-          class="block md:inline-block py-2 md:py-0 relative hover:text-tertiary transition-colors duration-200"
+          class="block md:inline-block py-2 md:py-0 relative group"
+          active-class="active-link"
           @click="closeMenu"
         >
-          Home
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-tertiary transition-all duration-300 group-hover:w-full"></span>
+          <span class="text-white hover:text-tertiary transition-colors duration-200">
+            Home
+          </span>
+          <span
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-tertiary transition-all duration-300 group-hover:w-full"
+          ></span>
+          <span
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 active-link:w-full"
+          ></span>
         </router-link>
 
         <!-- Events Link dengan Efek Garis Bawah -->
         <router-link
           to="/events"
-          class="block md:inline-block py-2 md:py-0 relative hover:text-tertiary transition-colors duration-200"
+          class="block md:inline-block py-2 md:py-0 relative group"
+          active-class="active-link"
           @click="closeMenu"
         >
-          Events
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-tertiary transition-all duration-300 group-hover:w-full"></span>
+          <span class="text-white hover:text-tertiary transition-colors duration-200">
+            Events
+          </span>
+          <span
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-tertiary transition-all duration-300 group-hover:w-full"
+          ></span>
+          <span
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 active-link:w-full"
+          ></span>
         </router-link>
 
         <!-- About Link dengan Efek Garis Bawah -->
         <router-link
           to="/about"
-          class="block md:inline-block py-2 md:py-0 relative hover:text-tertiary transition-colors duration-200"
+          class="block md:inline-block py-2 md:py-0 relative group"
+          active-class="active-link"
           @click="closeMenu"
         >
-          About
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-tertiary transition-all duration-300 group-hover:w-full"></span>
+          <span class="text-white hover:text-tertiary transition-colors duration-200">
+            About
+          </span>
+          <span
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-tertiary transition-all duration-300 group-hover:w-full"
+          ></span>
+          <span
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 active-link:w-full"
+          ></span>
         </router-link>
 
         <!-- Tombol Login -->
@@ -122,7 +146,3 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 </script>
-
-<style scoped>
-/* Tidak perlu CSS kustom, semua diatur dengan Tailwind */
-</style>
