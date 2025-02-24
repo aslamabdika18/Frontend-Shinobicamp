@@ -30,7 +30,3 @@ const toggleSidebar = () => {
   sidebar.value.toggleSidebar()
 }
 </script>
-
-<style scoped>
-/* Tambahkan gaya kustom jika diperlukan */
-</style>

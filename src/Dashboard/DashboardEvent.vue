@@ -453,7 +453,3 @@ const closeDetailModal = () => {
   isDetailModalOpen.value = false
 }
 </script>
-
-<style scoped>
-/* Tambahkan gaya kustom jika diperlukan */
-</style>
