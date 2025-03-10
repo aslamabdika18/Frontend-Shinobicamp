@@ -3,13 +3,15 @@
     <h1 class="text-2xl font-bold mb-6">Event Management</h1>
 
     <!-- Tombol Tambah Event -->
-    <button
-      @click="openCreateModal"
+    <div class="flex justify-start mb-4">
+    <router-link
+      to="/dashboard/crud-menu/addevent"
       class="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600 transition-colors flex items-center"
     >
       <font-awesome-icon :icon="['fas', 'plus']" class="mr-2" />
       Tambah Event
-    </button>
+    </router-link>
+  </div>
 
     <!-- Tabel Daftar Event (Desktop) -->
     <div class="hidden md:block">
@@ -118,214 +120,87 @@
       </div>
     </div>
 
-    <!-- Modal untuk Tambah/Edit Event -->
-  <div
-    v-if="isModalOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
-  >
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto">
-      <h2 class="text-2xl font-bold mb-6 text-gray-800">{{ isEditing ? 'Edit Event' : 'Tambah Event' }}</h2>
-      <form @submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Kolom Kiri: Informasi Utama -->
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Event Name</label>
-            <input
-              v-model="form.name"
-              type="text"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+    <!-- Modal untuk Detail Event -->
+    <div
+      v-if="isDetailModalOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Detail Event</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Kolom Kiri: Informasi Utama -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Event Name</label>
+              <p class="mt-1 text-lg font-semibold text-gray-900">{{ detailEvent.name }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Poster</label>
+              <img
+                :src="detailEvent.poster"
+                alt="Poster"
+                class="mt-2 w-full h-48 object-cover rounded-lg"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Description</label>
+              <p class="mt-1 text-gray-700">{{ detailEvent.description }}</p>
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Poster URL</label>
-            <input
-              v-model="form.poster"
-              type="text"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              v-model="form.description"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            ></textarea>
+
+          <!-- Kolom Kanan: Informasi Tambahan -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Proposal</label>
+              <p class="mt-1 text-gray-700">{{ detailEvent.proposal }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Slug</label>
+              <p class="mt-1 text-gray-700">{{ detailEvent.slug }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Location</label>
+              <p class="mt-1 text-gray-700">{{ detailEvent.location }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">First Event Date</label>
+              <p class="mt-1 text-gray-700">{{ detailEvent.first_event_date }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Last Event Date</label>
+              <p class="mt-1 text-gray-700">{{ detailEvent.last_event_date }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Register Deadline</label>
+              <p class="mt-1 text-gray-700">{{ detailEvent.registration_deadline }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Status</label>
+              <span
+                :class="{
+                  'bg-green-100 text-green-800': detailEvent.status === 'Aktif',
+                  'bg-red-100 text-red-800': detailEvent.status === 'Nonaktif',
+                }"
+                class="px-3 py-1 rounded-full text-sm font-medium"
+              >
+                {{ detailEvent.status }}
+              </span>
+            </div>
           </div>
         </div>
 
-        <!-- Kolom Kanan: Informasi Tambahan -->
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Proposal</label>
-            <input
-              v-model="form.proposal"
-              type="text"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Slug</label>
-            <input
-              v-model="form.slug"
-              type="text"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Location</label>
-            <input
-              v-model="form.location"
-              type="text"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">First Event Date</label>
-            <input
-              v-model="form.first_event_date"
-              type="date"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Last Event Date</label>
-            <input
-              v-model="form.last_event_date"
-              type="date"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Register Deadline</label>
-            <input
-              v-model="form.registration_deadline"
-              type="date"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Status</label>
-            <select
-              v-model="form.status"
-              class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            >
-              <option value="Aktif">Aktif</option>
-              <option value="Nonaktif">Nonaktif</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Tombol Aksi -->
-        <div class="md:col-span-2 flex justify-end space-x-4">
+        <!-- Tombol Tutup -->
+        <div class="mt-6 flex justify-end">
           <button
             type="button"
-            @click="closeModal"
+            @click="closeDetailModal"
             class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
           >
-            Batal
-          </button>
-          <button
-            type="submit"
-            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-          >
-            {{ isEditing ? 'Update' : 'Simpan' }}
+            Tutup
           </button>
         </div>
-      </form>
-    </div>
-  </div>
-
-    <!-- Modal untuk Detail Event -->
-  <div
-    v-if="isDetailModalOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
-  >
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto">
-      <h2 class="text-2xl font-bold mb-6 text-gray-800">Detail Event</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Kolom Kiri: Informasi Utama -->
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Event Name</label>
-            <p class="mt-1 text-lg font-semibold text-gray-900">{{ detailEvent.name }}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Poster</label>
-            <img
-              :src="detailEvent.poster"
-              alt="Poster"
-              class="mt-2 w-full h-48 object-cover rounded-lg"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Description</label>
-            <p class="mt-1 text-gray-700">{{ detailEvent.description }}</p>
-          </div>
-        </div>
-
-        <!-- Kolom Kanan: Informasi Tambahan -->
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Proposal</label>
-            <p class="mt-1 text-gray-700">{{ detailEvent.proposal }}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Slug</label>
-            <p class="mt-1 text-gray-700">{{ detailEvent.slug }}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Location</label>
-            <p class="mt-1 text-gray-700">{{ detailEvent.location }}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">First Event Date</label>
-            <p class="mt-1 text-gray-700">{{ detailEvent.first_event_date }}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Last Event Date</label>
-            <p class="mt-1 text-gray-700">{{ detailEvent.last_event_date }}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Register Deadline</label>
-            <p class="mt-1 text-gray-700">{{ detailEvent.registration_deadline }}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Status</label>
-            <span
-              :class="{
-                'bg-green-100 text-green-800': detailEvent.status === 'Aktif',
-                'bg-red-100 text-red-800': detailEvent.status === 'Nonaktif',
-              }"
-              class="px-3 py-1 rounded-full text-sm font-medium"
-            >
-              {{ detailEvent.status }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tombol Tutup -->
-      <div class="mt-6 flex justify-end">
-        <button
-          type="button"
-          @click="closeDetailModal"
-          class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-        >
-          Tutup
-        </button>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -362,23 +237,8 @@ const events = ref([
   },
 ])
 
-// State untuk modal dan form
-const isModalOpen = ref(false)
+// State untuk modal detail
 const isDetailModalOpen = ref(false)
-const isEditing = ref(false)
-const form = ref({
-  id: null,
-  name: '',
-  poster: '',
-  proposal: '',
-  slug: '',
-  description: '',
-  location: '',
-  first_event_date: '',
-  last_event_date: '',
-  registration_deadline: '',
-  status: 'Aktif',
-})
 const detailEvent = ref({
   id: null,
   name: '',
@@ -393,32 +253,6 @@ const detailEvent = ref({
   status: '',
 })
 
-// Buka modal untuk tambah event
-const openCreateModal = () => {
-  isEditing.value = false
-  form.value = {
-    id: null,
-    name: '',
-    poster: '',
-    proposal: '',
-    slug: '',
-    description: '',
-    location: '',
-    first_event_date: '',
-    last_event_date: '',
-    registration_deadline: '',
-    status: 'Aktif',
-  }
-  isModalOpen.value = true
-}
-
-// Buka modal untuk edit event
-const editEvent = (event) => {
-  isEditing.value = true
-  form.value = { ...event }
-  isModalOpen.value = true
-}
-
 // Buka modal untuk detail event
 const showDetail = (event) => {
   detailEvent.value = { ...event }
@@ -428,24 +262,6 @@ const showDetail = (event) => {
 // Hapus event
 const deleteEvent = (id) => {
   events.value = events.value.filter((event) => event.id !== id)
-}
-
-// Submit form (tambah/edit event)
-const submitForm = () => {
-  if (isEditing.value) {
-    // Update event
-    const index = events.value.findIndex((event) => event.id === form.value.id)
-    events.value[index] = { ...form.value }
-  } else {
-    // Tambah event baru
-    events.value.push({ ...form.value, id: events.value.length + 1 })
-  }
-  closeModal()
-}
-
-// Tutup modal tambah/edit
-const closeModal = () => {
-  isModalOpen.value = false
 }
 
 // Tutup modal detail

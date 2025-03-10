@@ -48,6 +48,10 @@ const router = createRouter({
           component: () => import('../Dashboard/DashboardEvent.vue'),
         },
         {
+          path: '/dashboard/crud-menu/addevent/:eventId?',
+          component: () => import('@/Dashboard/CRUD-Menu/AddEvent.vue'),
+        },
+        {
           path: 'teams', // URL: /dashboard/teams
           name: 'dashboard-teams',
           component: () => import('../Dashboard/DashboardTeam.vue'),
