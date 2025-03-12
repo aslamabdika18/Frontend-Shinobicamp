@@ -4,6 +4,7 @@
       <h2 class="text-3xl font-bold text-center text-primary mb-6">Sign In</h2>
       <form @submit.prevent="handleSignIn" class="space-y-6">
         <FormInput
+          id="email-input"
           label="Email"
           type="email"
           v-model="email"
@@ -11,6 +12,7 @@
           required
         />
         <FormInput
+          id="password-input"
           label="Password"
           type="password"
           v-model="password"
@@ -24,6 +26,7 @@
           Sign In
         </button>
       </form>
+      <p v-if="errorMessage" class="mt-4 text-center text-red-500">{{ errorMessage }}</p>
       <p class="mt-6 text-center text-gray-600">
         Don't have an account?
         <router-link to="/signup" class="text-secondary hover:underline">Sign Up</router-link>
@@ -34,15 +37,22 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import FormInput from '@/components/FormInput.vue'; // Reusable form input component
+import { useAuthStore } from '@/stores/authStore';
+import FormInput from '@/components/FormInput.vue';
 
 const email = ref('');
 const password = ref('');
-const router = useRouter();
+const errorMessage = ref('');
+const authStore = useAuthStore();
 
-const handleSignIn = () => {
-  console.log('Signing in with:', email.value, password.value);
-  router.push('/');
+const handleSignIn = async () => {
+  try {
+    await authStore.login({
+      email: email.value,
+      password: password.value,
+    });
+  } catch (error) {
+    errorMessage.value = error.message || 'Login failed. Please check your credentials.';
+  }
 };
 </script>
