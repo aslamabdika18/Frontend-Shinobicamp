@@ -28,7 +28,7 @@
         <router-link
           to="/dashboard"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -40,7 +40,7 @@
         <router-link
           to="/dashboard/events"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -52,7 +52,7 @@
         <router-link
           to="/dashboard/teams"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -64,7 +64,7 @@
         <router-link
           to="/dashboard/coaches"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -76,7 +76,7 @@
         <router-link
           to="/dashboard/classcamp"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -88,7 +88,7 @@
         <router-link
           to="/dashboard/categories"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -100,7 +100,7 @@
         <router-link
           to="/dashboard/brackets"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -112,7 +112,7 @@
         <router-link
           to="/dashboard/schedules"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
@@ -124,7 +124,7 @@
         <router-link
           to="/dashboard/payments"
           class="flex items-center py-3 px-6 text-gray-700 hover:bg-gray-100 rounded-lg mx-4 transition-colors duration-200"
-          :class="{ 'justify-center w-full px-0 mx-0': isSidebarCollapsed }"
+          :class="{ 'justify-center w-full px-0 mx-auto': isSidebarCollapsed }"
           active-class="bg-gray-100 font-semibold"
           exact-active-class="bg-gray-100 font-semibold"
         >
