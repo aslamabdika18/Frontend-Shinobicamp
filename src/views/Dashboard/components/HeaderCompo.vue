@@ -63,15 +63,20 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore' // Import authStore
 
 // State untuk dropdown
 const isDropdownOpen = ref(false)
 
-// Data dummy pengguna yang login
-const user = ref({
-  name: 'John Doe', // Nama user dummy
-})
+// Gunakan authStore
+const authStore = useAuthStore()
+
+// Gunakan router untuk redirect
+const router = useRouter()
+
+// Data user dari authStore
+const user = computed(() => authStore.user) // Ambil data user dari authStore
 
 // Fungsi untuk toggle dropdown
 const toggleDropdown = () => {
@@ -84,10 +89,15 @@ const closeDropdown = () => {
 }
 
 // Fungsi untuk logout
-const logout = () => {
-  // Tambahkan logika logout di sini
-  alert('Logout berhasil!')
-  isDropdownOpen.value = false
+const logout = async () => {
+  try {
+    await authStore.logout() // Panggil fungsi logout dari authStore
+    router.push('/signin') // Redirect ke halaman login setelah logout
+  } catch (error) {
+    console.error('Logout failed:', error)
+  } finally {
+    isDropdownOpen.value = false // Tutup dropdown setelah logout
+  }
 }
 
 // Ambil route yang aktif

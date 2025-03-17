@@ -39,20 +39,25 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 import FormInput from '@/components/FormInput.vue';
+import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 const authStore = useAuthStore();
+const router = useRouter();
 
 const handleSignIn = async () => {
   try {
-    await authStore.login({
+    const success = await authStore.login({
       email: email.value,
       password: password.value,
     });
+    if (success) {
+      router.push('/dashboard'); // Redirect ke dashboard setelah login berhasil
+    }
   } catch (error) {
-    errorMessage.value = error.message || 'Login failed. Please check your credentials.';
+    errorMessage.value = error.response?.data?.message || 'Login failed. Please check your credentials.';
   }
 };
 </script>

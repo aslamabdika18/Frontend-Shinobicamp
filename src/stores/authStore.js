@@ -1,67 +1,143 @@
 import { defineStore } from 'pinia'
-import { apiClient } from '@/api'
-import { handleError } from '@/utils/errorHandler'
+import { authApi } from '@/api' // Import your updated API client
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
+    roles: [],
     token: null,
-    isAuthenticated: false,
-    role: null, // Tambahkan role
+    isLoading: false,
+    error: null,
+    initialized: false, // Track initialization status
   }),
 
+  getters: {
+    isAuthenticated: (state) => !!state.token && !!state.user,
+    userData: (state) => state.user,
+    userRoles: (state) => state.roles,
+
+    // Check if user has a specific role
+    hasRole: (state) => (role) => {
+      return state.roles.includes(role)
+    },
+
+    // Check if user has any of the specified roles
+    hasAnyRole: (state) => (roles) => {
+      return state.roles.some((role) => roles.includes(role))
+    },
+
+    // Check if user is an admin
+    isAdmin: (state) => {
+      return state.roles.includes('admin')
+    },
+
+    // Check if user is a coach
+    isCoach: (state) => {
+      return state.roles.includes('coach')
+    },
+  },
+
   actions: {
-    // Inisialisasi auth saat aplikasi dimuat
-    initializeAuth() {
-      const token = localStorage.getItem('authToken')
+    async initialize() {
+      // Check if token exists in localStorage
+      const token = localStorage.getItem('token')
+
       if (token) {
         this.token = token
-        this.isAuthenticated = true
-        this.fetchUser() // Ambil data user jika token ada
+
+        try {
+          // Fetch user profile with the token
+          await this.fetchUserProfile()
+          this.initialized = true
+          return true
+        } catch (error) {
+          console.error('Failed to initialize authentication:', error)
+          this.logout()
+          this.initialized = true
+          return false
+        }
       }
+
+      this.initialized = true
+      return false
     },
 
-    // Login pengguna
     async login(credentials) {
+      this.isLoading = true
+      this.error = null
+
       try {
-        const response = await apiClient.post('/login', credentials)
-        this.setAuthData(response.data)
-        return true // Berhasil login
+        const response = await authApi.login(credentials)
+        const { token, user, roles } = response.data
+
+        this.setAuthData(user, roles, token)
+        return true
       } catch (error) {
-        handleError(error, 'Login failed. Please check your credentials.')
-        return false // Gagal login
+        this.error = error.response?.data?.message || 'Authentication failed'
+        throw error
+      } finally {
+        this.isLoading = false
       }
     },
 
-    // Set data autentikasi (termasuk role)
-    setAuthData(data) {
-      this.user = data.user
-      this.token = data.token
-      this.isAuthenticated = true
-      this.role = data.user.role // Simpan role
-      localStorage.setItem('authToken', data.token)
+    async register(userData) {
+      this.isLoading = true
+      this.error = null
+
+      try {
+        const response = await authApi.register(userData)
+        const { token, user, roles } = response.data
+
+        this.setAuthData(user, roles, token)
+        return true
+      } catch (error) {
+        this.error = error.response?.data?.message || 'Registration failed'
+        throw error
+      } finally {
+        this.isLoading = false
+      }
     },
 
-    // Hapus data autentikasi (termasuk role)
-    clearAuthData() {
+    async fetchUserProfile() {
+      if (!this.token) return null
+
+      try {
+        const response = await authApi.getUser()
+        this.user = response.data.user
+        this.roles = response.data.roles || []
+        return this.user
+      } catch (error) {
+        if (error.response?.status === 401) {
+          this.logout()
+        }
+        throw error
+      }
+    },
+
+    logout() {
+      // If we have a token, try to invalidate it on the server
+      if (this.token) {
+        authApi.logout().catch(() => {
+          // Silent catch - we're logging out regardless
+        })
+      }
+
+      // Clear auth data
       this.user = null
+      this.roles = []
       this.token = null
-      this.isAuthenticated = false
-      this.role = null // Hapus role
-      localStorage.removeItem('authToken')
+
+      // Remove from localStorage
+      localStorage.removeItem('token')
     },
 
-    // Ambil data pengguna yang sedang login
-    async fetchUser() {
-      try {
-        const response = await apiClient.get('/user')
-        this.user = response.data
-        this.isAuthenticated = true
-        this.role = response.data.role // Perbarui role
-        // eslint-disable-next-line no-unused-vars
-      } catch (error) {
-        this.clearAuthData() // Hapus data auth jika gagal
-      }
+    setAuthData(user, roles, token) {
+      this.user = user
+      this.roles = Array.isArray(roles) ? roles : []
+      this.token = token
+
+      // Store token in localStorage for persistence
+      localStorage.setItem('token', token)
     },
   },
 })

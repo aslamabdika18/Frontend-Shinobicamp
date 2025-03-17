@@ -1,36 +1,38 @@
 import './assets/main.css'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons' // Impor semua ikon Solid sekaligus
-import { far } from '@fortawesome/free-regular-svg-icons' // Ikon Regular
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { useAuthStore } from '@/stores/authStore'
 
-// Tambahkan semua ikon Solid dan Regular ke library
+// Add all icons to library
 library.add(fas, far)
 
-// Buat instance aplikasi Vue
+// Create Vue app
 const app = createApp(App)
 
-// Buat instance Pinia
+// Create and use Pinia
 const pinia = createPinia()
-
-// Register Pinia ke aplikasi Vue
 app.use(pinia)
 
-// Inisialisasi auth store
-import { useAuthStore } from '@/stores/authStore' // Import auth store
-const authStore = useAuthStore() // Buat instance auth store
-authStore.initializeAuth() // Inisialisasi auth store
-
-// Register komponen FontAwesomeIcon secara global
+// Register FontAwesomeIcon globally
 app.component('font-awesome-icon', FontAwesomeIcon)
 
-// Register router ke aplikasi Vue
-app.use(router)
+// Initialize auth store before mounting app
+const authStore = useAuthStore()
 
-// Mount aplikasi Vue ke elemen dengan id "app"
-app.mount('#app')
+// Using an immediately invoked async function
+;(async () => {
+  // Initialize auth store
+  await authStore.initialize()
+
+  // Register router after auth is initialized
+  app.use(router)
+
+  // Mount app
+  app.mount('#app')
+})()
