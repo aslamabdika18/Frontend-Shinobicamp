@@ -27,12 +27,21 @@ const authStore = useAuthStore()
 
 // Using an immediately invoked async function
 ;(async () => {
+  console.log('App initialization started')
+
   // Initialize auth store
-  await authStore.initialize()
+  try {
+    console.log('Starting auth store initialization')
+    const result = await authStore.initialize()
+    console.log('Auth store initialization complete, authenticated:', result)
+  } catch (err) {
+    console.error('Auth store initialization error:', err)
+  }
 
   // Register router after auth is initialized
   app.use(router)
 
   // Mount app
   app.mount('#app')
+  console.log('App mounted')
 })()
