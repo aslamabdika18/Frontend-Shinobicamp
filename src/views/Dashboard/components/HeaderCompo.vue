@@ -92,7 +92,7 @@ const closeDropdown = () => {
 const logout = async () => {
   try {
     await authStore.logout() // Panggil fungsi logout dari authStore
-    router.push('/signin') // Redirect ke halaman login setelah logout
+    router.push('/') // Redirect ke halaman home setelah logout
   } catch (error) {
     console.error('Logout failed:', error)
   } finally {
